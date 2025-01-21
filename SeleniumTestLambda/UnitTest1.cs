@@ -1,23 +1,37 @@
 using OpenQA.Selenium;
+using OpenQA.Selenium.BiDi.Communication;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
+using OpenQA.Selenium.Remote;
 using OpenQA.Selenium.Support.UI;
 
 namespace SeleniumTestLambda
 {
     public class Tests
     {
-        IWebDriver driver;
+       IWebDriver driver;
+       string hubUrl = "https://hub.lambdatest.com/wd/hub/";
+        WebDriverFactory factory;
 
         [SetUp]
         public void Setup()
         {
-             driver = new ChromeDriver();
+            //driver = new ChromeDriver();
+            factory = new WebDriverFactory();
+            
+            string browsername = TestContext.CurrentContext.Test.Arguments[0].ToString();
+            Console.WriteLine(browsername);
+            driver = new RemoteWebDriver(new Uri(hubUrl), factory.browserCapabilities(browsername));
         }
 
         [Test]
-        public void Test1()
+        [TestCase("chrome")]
+        [TestCase("firefox")]
+        [TestCase("edge")]
+        [TestCase("Internet Explorer")]
+        public void Scenario1(string browser)
         {
+            Console.WriteLine("Browse name is " + TestContext.CurrentContext.Test.Arguments[0].ToString());
             driver.Navigate().GoToUrl("https://www.lambdatest.com/selenium-playground/");
 
             IWebElement simpleFormDemoLink = driver.FindElement(By.XPath("//*[@id=\"__next\"]/div/section[2]/div/ul/li[34]/a"));
