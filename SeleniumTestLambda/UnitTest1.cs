@@ -6,6 +6,7 @@ using OpenQA.Selenium.Support.UI;
 
 namespace SeleniumTestLambda
 {
+   
     public class Tests
     {
         IWebDriver driver;
