@@ -59,7 +59,7 @@ namespace SeleniumTestLambda
                     edge.AddAdditionalOption("LT:options", edgeltOptions);
                     return edge.ToCapabilities();
 
-                case "Internet Explorer":
+                case "internet explorer":
                     InternetExplorerOptions internetExplorer = new InternetExplorerOptions();
                     internetExplorer.BrowserVersion = "11.0";
                     internetExplorer.PlatformName = "Windows10";

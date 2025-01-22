@@ -1,5 +1,4 @@
 using OpenQA.Selenium;
-using OpenQA.Selenium.BiDi.Communication;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Interactions;
 using OpenQA.Selenium.Remote;
@@ -9,26 +8,24 @@ namespace SeleniumTestLambda
 {
     public class Tests
     {
-       IWebDriver driver;
-       string hubUrl = "https://hub.lambdatest.com/wd/hub/";
+        IWebDriver driver;
+        string hubUrl = "https://hub.lambdatest.com/wd/hub/";
         WebDriverFactory factory;
 
         [SetUp]
         public void Setup()
         {
-            
             factory = new WebDriverFactory();
-            
             string browsername = TestContext.CurrentContext.Test.Arguments[0].ToString();
-            Console.WriteLine(browsername);
             driver = new RemoteWebDriver(new Uri(hubUrl), factory.browserCapabilities(browsername));
+            //driver = new ChromeDriver();
         }
 
         [Test]
         [TestCase("chrome")]
         [TestCase("firefox")]
         [TestCase("edge")]
-        [TestCase("Internet Explorer")]
+        [TestCase("internet explorer")]
         public void Scenario1(string browser)
         {
             Console.WriteLine("Browse name is " + TestContext.CurrentContext.Test.Arguments[0].ToString());
@@ -50,11 +47,15 @@ namespace SeleniumTestLambda
             getCheckedValueBtn.Click();
 
             IWebElement inputtedText = driver.FindElement(By.XPath("//*[@id=\"message\"]"));
-            Assert.That(inputText,Is.EqualTo(inputtedText.Text));
+            Assert.That(inputText, Is.EqualTo(inputtedText.Text));
         }
 
         [Test]
-        public void Scenario2()
+        [TestCase("chrome")]
+        [TestCase("firefox")]
+        [TestCase("edge")]
+        [TestCase("internet explorer")]
+        public void Scenario2(string browser)
         {
             driver.Navigate().GoToUrl("https://www.lambdatest.com/selenium-playground/");
             IWebElement dndSliderLink = driver.FindElement(By.XPath("//*[@id=\"__next\"]/div/section[2]/div/ul/li[13]/a"));
@@ -62,21 +63,29 @@ namespace SeleniumTestLambda
 
             IWebElement slider = driver.FindElement(By.XPath("//*[@id=\"slider3\"]/div/input"));
 
+            int desiredValue = 95;
+            int sliderWidth = slider.Size.Width;
+            Console.WriteLine(sliderWidth.ToString());
+
             Actions action = new Actions(driver);
-            action.ClickAndHold(slider).MoveByOffset(186, 0).Perform();
+            action.ClickAndHold(slider).MoveByOffset(215, 0).Perform();
             Thread.Sleep(3000);
 
             IWebElement selectedRange = driver.FindElement(By.XPath("//*[@id=\"rangeSuccess\"]"));
-            
-                Console.WriteLine(selectedRange.Text);
-            Assert.That("95",Is.EqualTo(selectedRange.Text));
+
+            Console.WriteLine(selectedRange.Text);
+            Assert.That("95", Is.EqualTo(selectedRange.Text));
         }
 
         [Test]
-        public void Scenario3()
+        [TestCase("chrome")]
+        [TestCase("firefox")]
+        [TestCase("edge")]
+        [TestCase("internet explorer")]
+        public void Scenario3(string browser)
         {
             driver.Navigate().GoToUrl("https://www.lambdatest.com/selenium-playground/");
-            
+
             IWebElement inputFormSubmitLink = driver.FindElement(By.XPath("//*[@id=\"__next\"]/div/section[2]/div/ul/li[20]/a"));
             inputFormSubmitLink.Click();
 
@@ -112,7 +121,7 @@ namespace SeleniumTestLambda
             Addr2TxtBox.SendKeys("Bouvelard ");
             StateTxtBox.SendKeys("Chicago");
             zipCodeTxtBox.SendKeys("124578");
-            
+
             SelectElement selectCountry = new SelectElement(countryTxtBox);
             selectCountry.SelectByText("United States");
             submitBtn.Click();
@@ -121,7 +130,6 @@ namespace SeleniumTestLambda
 
             Console.WriteLine(successMessage.Text);
             Assert.That(successMessage.Text, Is.EqualTo("Thanks for contacting us, we will get back to you shortly."));
-
         }
 
         [TearDown]
