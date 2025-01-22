@@ -1,38 +1,34 @@
-﻿using OpenQA.Selenium.Chrome;
+﻿using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
-using OpenQA.Selenium;
-using static System.Environment;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using OpenQA.Selenium.IE;
-using OpenQA.Selenium.Remote;
+using static System.Environment;
 
 namespace SeleniumTestLambda
 {
-    public  class WebDriverFactory
+    public class WebDriverFactory
     {
-       
-        public  ICapabilities browserCapabilities(string browserName)
+        public ICapabilities browserCapabilities(string browserName)
         {
             String LT_USERNAME = GetEnvironmentVariable("LT_USERNAME");
             String LT_ACCESS_KEY = GetEnvironmentVariable("LT_ACCESS_KEY");
+
             switch (browserName.ToLower())
             {
                 case "chrome":
 
-                    ChromeOptions chrome = new ChromeOptions();            
+                    ChromeOptions chrome = new ChromeOptions();
                     chrome.BrowserVersion = "128.0";
                     chrome.PlatformName = "Windows 10";
 
                     Dictionary<string, object> chromeltOptions = new Dictionary<string, object>();
                     chromeltOptions.Add("username", LT_USERNAME);
                     chromeltOptions.Add("accessKey", LT_ACCESS_KEY);
+                    chromeltOptions.Add("visual", true);
+                    chromeltOptions.Add("video", true);
+                    chromeltOptions.Add("network", true);
                     chrome.AddAdditionalOption("LT:Options", chromeltOptions);
-                    //return new RemoteWebDriver(new Uri("https://hub.lambdatest.com/wd/hub/"), chrome);
                     return chrome.ToCapabilities();
 
 
@@ -44,9 +40,10 @@ namespace SeleniumTestLambda
                     Dictionary<string, object> firefoxltOptions = new Dictionary<string, object>();
                     firefoxltOptions.Add("username", LT_USERNAME);
                     firefoxltOptions.Add("accessKey", LT_ACCESS_KEY);
+                    firefoxltOptions.Add("visual", true);
+                    firefoxltOptions.Add("video", true);
+                    firefoxltOptions.Add("network", true);
                     firefox.AddAdditionalOption("LT:options", firefoxltOptions);
-
-                    //return new RemoteWebDriver(new Uri("https://hub.lambdatest.com/wd/hub/"), firefox);
                     return firefox.ToCapabilities();
                 case "edge":
 
@@ -56,10 +53,11 @@ namespace SeleniumTestLambda
                     Dictionary<string, object> edgeltOptions = new Dictionary<string, object>();
                     edgeltOptions.Add("username", LT_USERNAME);
                     edgeltOptions.Add("accessKey", LT_ACCESS_KEY);
+                    edgeltOptions.Add("visual", true);
+                    edgeltOptions.Add("video", true);
+                    edgeltOptions.Add("network", true);
                     edge.AddAdditionalOption("LT:options", edgeltOptions);
-
-                   // return new RemoteWebDriver(new Uri("https://hub.lambdatest.com/wd/hub/"), edge);
-                   return edge.ToCapabilities();
+                    return edge.ToCapabilities();
 
                 case "Internet Explorer":
                     InternetExplorerOptions internetExplorer = new InternetExplorerOptions();
@@ -68,10 +66,11 @@ namespace SeleniumTestLambda
                     Dictionary<string, object> ieltOptions = new Dictionary<string, object>();
                     ieltOptions.Add("username", LT_USERNAME);
                     ieltOptions.Add("accessKey", LT_ACCESS_KEY);
+                    ieltOptions.Add("visual", true);
+                    ieltOptions.Add("video", true);
+                    ieltOptions.Add("network", true);
                     internetExplorer.AddAdditionalOption("LT:options", ieltOptions);
-
-                   // return new RemoteWebDriver(new Uri("https://hub.lambdatest.com/wd/hub/"), internetExplorer);
-                   return internetExplorer.ToCapabilities();
+                    return internetExplorer.ToCapabilities();
                 default:
                     throw new ArgumentException("Browser not found exception");
             }

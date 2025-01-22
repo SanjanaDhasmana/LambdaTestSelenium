@@ -16,7 +16,7 @@ namespace SeleniumTestLambda
         [SetUp]
         public void Setup()
         {
-            //driver = new ChromeDriver();
+            
             factory = new WebDriverFactory();
             
             string browsername = TestContext.CurrentContext.Test.Arguments[0].ToString();
